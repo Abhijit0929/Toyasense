@@ -36,12 +36,12 @@ def register_device(device: DeviceRegistration):
 
     try:
         existing = (
-            supabase.table("taps")
-            .select("id, device_id")
-            .eq("device_id", device_id)
-            .limit(1)
-            .execute()
-        )
+        supabase.table("taps")
+        .select("id, device_id")
+        .eq("device_id", device_id)
+        .limit(1)
+        .execute()
+    )
 
         if existing.data:
             supabase.table("taps").update({
