@@ -1,0 +1,9 @@
+# Environment variables
+.env
+
+# Python caching
+__pycache__/
+*.pyc
+
+# Local data files (optional, but standard practice if they contain large datasets)
+data/*.csv
