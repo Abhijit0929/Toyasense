@@ -69,14 +69,9 @@ def register_device(device: DeviceRegistration):
             "device_id": device_id
         }
 
-    except Exception:
-        raise HTTPException(
-            status_code=500,
-            detail="Registration failed"
-        )
-
     except Exception as e:
-        print(f"Registration error: {type(e).__name__}: {e}")
+        import traceback
+        traceback.print_exc()
         raise HTTPException(
             status_code=500,
             detail="Registration failed"
