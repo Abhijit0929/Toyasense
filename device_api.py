@@ -5,13 +5,42 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from supabase import create_client
-
+from urllib.parse import urlparse
 load_dotenv()
 
+# Read environment variables
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "").strip()
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "").strip()
+
+# Validate configuration
+if not SUPABASE_URL:
+    raise RuntimeError("SUPABASE_URL is missing")
+
+if not SUPABASE_KEY:
+    raise RuntimeError("SUPABASE_KEY is missing")
+
+parsed_url = urlparse(SUPABASE_URL)
+
+if parsed_url.scheme != "https" or not parsed_url.netloc:
+    raise RuntimeError(
+        "SUPABASE_URL must be a valid HTTPS project URL"
+    )
+
+if parsed_url.path not in ("", "/"):
+    raise RuntimeError(
+        "SUPABASE_URL must not contain a path such as /rest/v1"
+    )
+
+print("Supabase host:", parsed_url.netloc)
+print("Supabase path:", repr(parsed_url.path))
+
+# Initialize Supabase client
 supabase = create_client(
-    os.environ["SUPABASE_URL"],
-    os.environ["SUPABASE_KEY"]
+    SUPABASE_URL,
+    SUPABASE_KEY
 )
+
+print("Supabase client initialized successfully")
 
 app = FastAPI(title="ToyaSense Registration API")
 
